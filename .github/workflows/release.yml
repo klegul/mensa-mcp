@@ -20,19 +20,19 @@ jobs:
           go-version: '1.21'
 
       - name: Build for Linux AMD64
-        run: GOOS=linux GOARCH=amd64 go build -o myapp-linux-amd64 .
+        run: GOOS=linux GOARCH=amd64 go build -o mensa-mcp-linux-amd64 .
 
       - name: Build for Linux ARM64
-        run: GOOS=linux GOARCH=arm64 go build -o myapp-linux-arm64 .
+        run: GOOS=linux GOARCH=arm64 go build -o mensa-mcp-linux-arm64 .
 
       - name: Build for Windows AMD64
-        run: GOOS=windows GOARCH=amd64 go build -o myapp-windows-amd64.exe .
+        run: GOOS=windows GOARCH=amd64 go build -o mensa-mcp-windows-amd64.exe .
 
       - name: Build for Darwin AMD64
-        run: GOOS=darwin GOARCH=amd64 go build -o myapp-darwin-amd64 .
+        run: GOOS=darwin GOARCH=amd64 go build -o mensa-mcp-darwin-amd64 .
 
       - name: Build for Darwin ARM64
-        run: GOOS=darwin GOARCH=arm64 go build -o myapp-darwin-arm64 .
+        run: GOOS=darwin GOARCH=arm64 go build -o mensa-mcp-darwin-arm64 .
 
       - name: Create Release
         id: create_release
@@ -51,8 +51,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./myapp-linux-amd64
-          asset_name: myapp-linux-amd64
+          asset_path: ./mensa-mcp-linux-amd64
+          asset_name: mensa-mcp-linux-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Linux ARM64 Asset
@@ -61,8 +61,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./myapp-linux-arm64
-          asset_name: myapp-linux-arm64
+          asset_path: ./mensa-mcp-linux-arm64
+          asset_name: mensa-mcp-linux-arm64
           asset_content_type: application/octet-stream
 
       - name: Upload Windows AMD64 Asset
@@ -71,8 +71,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./myapp-windows-amd64.exe
-          asset_name: myapp-windows-amd64.exe
+          asset_path: ./mensa-mcp-windows-amd64.exe
+          asset_name: mensa-mcp-windows-amd64.exe
           asset_content_type: application/octet-stream
 
       - name: Upload Darwin AMD64 Asset
@@ -81,8 +81,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./myapp-darwin-amd64
-          asset_name: myapp-darwin-amd64
+          asset_path: ./mensa-mcp-darwin-amd64
+          asset_name: mensa-mcp-darwin-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Darwin ARM64 Asset
@@ -91,6 +91,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./myapp-darwin-arm64
-          asset_name: myapp-darwin-arm64
+          asset_path: ./mensa-mcp-darwin-arm64
+          asset_name: mensa-mcp-darwin-arm64
           asset_content_type: application/octet-stream
