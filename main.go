@@ -17,7 +17,7 @@ const akkBaseUrl = "https://mensa.akk.org/json"
 var akkMensaApi = NewAkkMensaApi(akkBaseUrl)
 
 func main() {
-	s := server.NewMCPServer("Mensa Karlsruhe", "0.1.0",
+	s := server.NewMCPServer("Mensa Karlsruhe", "0.1.1",
 		server.WithToolCapabilities(true),
 		server.WithResourceCapabilities(false, true),
 		server.WithLogging(),
