@@ -18,7 +18,9 @@ var akkMensaApi = NewAkkMensaApi(akkBaseUrl)
 
 func main() {
 	s := server.NewMCPServer("Mensa Karlsruhe", "0.1.0",
-		server.WithResourceCapabilities(true, true),
+		server.WithToolCapabilities(true),
+		server.WithResourceCapabilities(false, true),
+		server.WithLogging(),
 	)
 
 	s.AddTool(
@@ -39,7 +41,9 @@ func main() {
 	)
 
 	log.Println("Starting StreamableHTTP server on :8080")
-	httpServer := server.NewStreamableHTTPServer(s)
+	httpServer := server.NewStreamableHTTPServer(s,
+		server.WithEndpointPath("/api/v1/mcp"),
+		server.WithHeartbeatInterval(30*time.Second))
 	if err := httpServer.Start(":8080"); err != nil {
 		log.Fatal(err)
 	}
@@ -83,5 +87,9 @@ func handleMenuTool(_ context.Context, _ mcp.CallToolRequest) (*mcp.CallToolResu
 		dateStrings = append(dateStrings, date.Format("2006-01-02"))
 	}
 
-	return mcp.NewToolResultStructured(dateStrings, "Available dates: "+strings.Join(dateStrings, ", ")), nil
+	resultObject := map[string]interface{}{
+		"available_dates": dateStrings,
+	}
+
+	return mcp.NewToolResultStructured(resultObject, "Available dates: "+strings.Join(dateStrings, ", ")), nil
 }
