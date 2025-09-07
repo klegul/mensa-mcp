@@ -1,0 +1,96 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build for Linux AMD64
+        run: GOOS=linux GOARCH=amd64 go build -o mensa-mcp-linux-amd64 .
+
+      - name: Build for Linux ARM64
+        run: GOOS=linux GOARCH=arm64 go build -o mensa-mcp-linux-arm64 .
+
+      - name: Build for Windows AMD64
+        run: GOOS=windows GOARCH=amd64 go build -o mensa-mcp-windows-amd64.exe .
+
+      - name: Build for Darwin AMD64
+        run: GOOS=darwin GOARCH=amd64 go build -o mensa-mcp-darwin-amd64 .
+
+      - name: Build for Darwin ARM64
+        run: GOOS=darwin GOARCH=arm64 go build -o mensa-mcp-darwin-arm64 .
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Linux AMD64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mensa-mcp-linux-amd64
+          asset_name: mensa-mcp-linux-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Linux ARM64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mensa-mcp-linux-arm64
+          asset_name: mensa-mcp-linux-arm64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows AMD64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mensa-mcp-windows-amd64.exe
+          asset_name: mensa-mcp-windows-amd64.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Darwin AMD64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mensa-mcp-darwin-amd64
+          asset_name: mensa-mcp-darwin-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Darwin ARM64 Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mensa-mcp-darwin-arm64
+          asset_name: mensa-mcp-darwin-arm64
+          asset_content_type: application/octet-stream
